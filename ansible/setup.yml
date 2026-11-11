@@ -4,7 +4,7 @@
   become: true
   roles:
     - user_setup
-    - ufw_rules
+    - dauxdu.roles.set_ufw
     - ssh_hardening
     - deploy_3x_ui
 
@@ -19,7 +19,7 @@
           - curl
           - nginx
           - certbot
-    - ufw_rules
+    - dauxdu.roles.set_ufw
     - ssh_hardening
     - deploy_nginx
     - deploy_3x_ui
