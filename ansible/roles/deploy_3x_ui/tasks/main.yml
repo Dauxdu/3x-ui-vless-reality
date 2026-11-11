@@ -1,0 +1,13 @@
+---
+- name: Установить 3x-ui
+  ansible.builtin.shell: |
+    XUI_NONINTERACTIVE=1 bash <(curl -Ls {{ deploy_3x_ui_install_script_url | quote }})
+  args:
+    creates: "{{ deploy_3x_ui_install_creates }}"
+    executable: /bin/bash
+
+- name: Панель x-ui запущена и в автозагрузке
+  ansible.builtin.systemd:
+    name: "{{ deploy_3x_ui_service_name }}"
+    state: started
+    enabled: true
