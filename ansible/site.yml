@@ -1,0 +1,6 @@
+---
+- name: Обновление сайта на oNode
+  hosts: onode
+  become: true
+  roles:
+    - deploy_nginx
