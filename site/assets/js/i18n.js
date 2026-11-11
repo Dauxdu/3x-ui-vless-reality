@@ -14,10 +14,9 @@
       f2d: "Ваши данные остаются у вас. Свой сервер — свои правила.",
       f3t: "Web, телефон и компьютер",
       f3d: "Приложения для браузера, iOS/Android и десктопа — всё синхронизировано.",
-      cta: "Написать нам",
       footerTag: "Self-hosted AI-мессенджер",
       t404: "Страница не найдена",
-      d404: "Такой страницы нет. Возможно, она появится позже — мы ведь ещё в пути.",
+      d404: "Такой страницы нет. Возможно, она появится позже.",
       home: "На главную"
     },
     en: {
@@ -31,10 +30,9 @@
       f2d: "Your data stays yours. Your server, your rules.",
       f3t: "Web, phone and desktop",
       f3d: "Apps for the browser, iOS/Android and desktop — all kept in sync.",
-      cta: "Contact us",
       footerTag: "Self-hosted AI messenger",
       t404: "Page not found",
-      d404: "This page does not exist. It may appear later — we are still on our way.",
+      d404: "This page does not exist. It may appear later.",
       home: "Home"
     }
   };
