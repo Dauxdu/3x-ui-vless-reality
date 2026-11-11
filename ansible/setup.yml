@@ -7,7 +7,6 @@
     - ufw_rules
     - ssh_hardening
     - deploy_3x_ui
-    # - deploy_warp_socks5
 
 - name: Провижининг oNode
   hosts: onode
