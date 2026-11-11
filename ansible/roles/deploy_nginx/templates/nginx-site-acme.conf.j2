@@ -1,0 +1,6 @@
+server {
+    listen 80;
+    server_name {{ deploy_nginx_domain }};
+    root {{ deploy_nginx_webroot }};
+    index index.html;
+}

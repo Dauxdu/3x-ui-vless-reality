@@ -1,0 +1,21 @@
+---
+- name: Провижининг iNode
+  hosts: inode
+  become: true
+  roles:
+    - user_setup
+    - ufw_rules
+    - ssh_hardening
+    - deploy_3x_ui
+    # - deploy_warp_socks5
+
+- name: Провижининг oNode
+  hosts: onode
+  become: true
+  roles:
+    - user_setup
+    - packages
+    - ufw_rules
+    - ssh_hardening
+    - deploy_nginx
+    - deploy_3x_ui

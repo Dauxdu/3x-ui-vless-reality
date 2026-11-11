@@ -1,0 +1,11 @@
+---
+- name: Проверить конфиг nginx
+  ansible.builtin.command: nginx -t
+  changed_when: false
+  listen: Перезагрузить nginx
+
+- name: Перезагрузить nginx
+  ansible.builtin.systemd:
+    name: "{{ deploy_nginx_service_name }}"
+    state: reloaded
+  listen: Перезагрузить nginx
