@@ -1,0 +1,6 @@
+---
+- name: Установить пакеты
+  ansible.builtin.apt:
+    name: "{{ packages_base }}"
+    state: present
+    update_cache: true

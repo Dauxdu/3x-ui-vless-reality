@@ -1,0 +1,5 @@
+---
+packages_base:
+  - nginx
+  - certbot
+  - curl
