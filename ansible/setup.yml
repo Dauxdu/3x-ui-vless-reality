@@ -13,7 +13,12 @@
   become: true
   roles:
     - user_setup
-    - packages
+    - role: dauxdu.roles.set_packages
+      vars:
+        set_packages_apt:
+          - curl
+          - nginx
+          - certbot
     - ufw_rules
     - ssh_hardening
     - deploy_nginx
