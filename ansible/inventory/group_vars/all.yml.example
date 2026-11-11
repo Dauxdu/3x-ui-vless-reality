@@ -1,3 +1,8 @@
+set_ufw_rules_allow:
+  - { port: 22222, proto: tcp, comment: "SSH" }
+  - { port: 80, proto: tcp, comment: "HTTP + ACME" }
+  - { port: 443, proto: tcp, comment: "VLESS Reality" }
+
 user_setup_admin_user: admin
 user_setup_admin_ssh_key: "ssh-ed25519 "
 
