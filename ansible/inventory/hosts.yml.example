@@ -1,0 +1,15 @@
+---
+all:
+  children:
+    inode:
+      hosts:
+        inode1:
+          ansible_host: kvn.example.com
+          ansible_user: root
+          ansible_port: 22
+    onode:
+      hosts:
+        onode1:
+          ansible_host: site.example.com
+          ansible_user: root
+          ansible_port: 22
