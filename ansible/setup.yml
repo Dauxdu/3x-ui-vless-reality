@@ -7,6 +7,7 @@
     - dauxdu.roles.set_ufw
     - dauxdu.roles.set_ssh
     - deploy_3x_ui
+    - dauxdu.roles.set_motd
 
 - name: Провижининг oNode
   hosts: onode
@@ -18,3 +19,4 @@
     - dauxdu.roles.set_ssh
     - deploy_nginx
     - deploy_3x_ui
+    - dauxdu.roles.set_motd
