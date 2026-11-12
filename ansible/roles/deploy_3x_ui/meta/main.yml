@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: Dauxdu
+  description: Неинтерактивная установка панели 3x-ui
+  license: MIT
+  min_ansible_version: "2.15"
+  platforms:
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+
+dependencies: []
