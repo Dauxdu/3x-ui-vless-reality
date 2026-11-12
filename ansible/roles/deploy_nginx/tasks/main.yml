@@ -1,83 +1,12 @@
 ---
-- name: Проверить обязательные переменные
-  ansible.builtin.assert:
-    that:
-      - deploy_nginx_domain | length > 0 and deploy_nginx_domain != 'CHANGE_ME'
-      - deploy_nginx_acme_email | length > 0 and deploy_nginx_acme_email != 'CHANGE_ME'
-    msg: "Задайте deploy_nginx_domain и deploy_nginx_acme_email в group_vars/onode.yml"
+- name: Validate required variables
+  ansible.builtin.import_tasks: validate.yml
 
-- name: Развернуть сайт в {{ deploy_nginx_webroot }}
-  ansible.builtin.copy:
-    src: "{{ deploy_nginx_site_source }}/"
-    dest: "{{ deploy_nginx_webroot }}/"
-    mode: preserve
-  notify: Перезагрузить nginx
+- name: Deploy static site
+  ansible.builtin.import_tasks: site.yml
 
-- name: Vhost HTTP :80
-  ansible.builtin.template:
-    src: nginx-site-acme.conf.j2
-    dest: "{{ deploy_nginx_site_conf }}"
-    mode: "0644"
-  notify: Перезагрузить nginx
+- name: Issue TLS certificate
+  ansible.builtin.import_tasks: certificate.yml
 
-- name: Nginx запущен и в автозагрузке
-  ansible.builtin.systemd:
-    name: "{{ deploy_nginx_service_name }}"
-    state: started
-    enabled: true
-
-- name: Применить конфиг nginx до выпуска сертификата
-  ansible.builtin.meta: flush_handlers
-
-- name: Сайт отвечает на :80
-  ansible.builtin.uri:
-    url: http://127.0.0.1/
-    headers:
-      Host: "{{ deploy_nginx_domain }}"
-    status_code: 200
-
-- name: Выпуск сертификата Let's Encrypt
-  ansible.builtin.command: >
-    certbot certonly --webroot -w {{ deploy_nginx_webroot }} --cert-name {{ deploy_nginx_domain }}
-    -d {{ deploy_nginx_domain }} -m {{ deploy_nginx_acme_email }} --agree-tos --no-eff-email
-    --non-interactive
-    {{ '--keep-until-expiring' if deploy_nginx_cert_keep_if_exists else '' }}
-  register: deploy_nginx_certbot_result
-  changed_when: >-
-    not (deploy_nginx_certbot_result.stdout ~ deploy_nginx_certbot_result.stderr
-    is search('not yet due for renewal|Keeping the existing certificate'))
-
-- name: Vhost HTTP :80 + HTTPS 127.0.0.1:8443
-  ansible.builtin.template:
-    src: nginx-site.conf.j2
-    dest: "{{ deploy_nginx_site_conf }}"
-    mode: "0644"
-  notify: Перезагрузить nginx
-
-- name: Применить финальный конфиг nginx
-  ansible.builtin.meta: flush_handlers
-
-- name: Проверка TLS 1.3 + HTTP/2 на 8443 # noqa: command-instead-of-module
-  ansible.builtin.command: >
-    curl --fail --http2 --tlsv1.3 --resolve {{ deploy_nginx_domain }}:8443:127.0.0.1
-    https://{{ deploy_nginx_domain }}:8443/ -o /dev/null
-    -w 'HTTP %{http_code}, версия HTTP/%{http_version}'
-  changed_when: false
-
-- name: Renew-хуки certbot
-  ansible.builtin.copy:
-    content: "{{ item.content }}"
-    dest: "/etc/letsencrypt/renewal-hooks/deploy/{{ item.name }}"
-    mode: "0755"
-  loop: "{{ deploy_nginx_certbot_hooks }}"
-
-- name: Certbot.timer включён
-  ansible.builtin.systemd:
-    name: certbot.timer
-    enabled: true
-    state: started
-
-- name: Dry-run продления сертификата
-  ansible.builtin.command:
-    cmd: certbot renew --cert-name {{ deploy_nginx_domain }} --dry-run
-  changed_when: false
+- name: Install renew hooks and timer
+  ansible.builtin.import_tasks: hooks.yml

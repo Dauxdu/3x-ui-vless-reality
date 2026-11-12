@@ -1,0 +1,19 @@
+---
+- name: Install certbot renew hooks
+  ansible.builtin.copy:
+    content: "{{ item.content }}"
+    dest: "/etc/letsencrypt/renewal-hooks/deploy/{{ item.name }}"
+    mode: "0755"
+  loop: "{{ deploy_nginx_certbot_hooks }}"
+
+- name: Ensure certbot.timer is enabled
+  ansible.builtin.systemd_service:
+    name: certbot.timer
+    enabled: true
+    state: started
+
+- name: Dry-run certificate renewal
+  ansible.builtin.command:
+    cmd: certbot renew --cert-name {{ deploy_nginx_domain }} --dry-run
+  changed_when: false
+  when: deploy_nginx_certbot_dry_run | bool

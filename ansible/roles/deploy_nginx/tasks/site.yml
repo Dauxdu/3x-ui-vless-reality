@@ -1,0 +1,30 @@
+---
+- name: Deploy site to {{ deploy_nginx_webroot }}
+  ansible.builtin.copy:
+    src: "{{ deploy_nginx_site_source }}/"
+    dest: "{{ deploy_nginx_webroot }}/"
+    mode: preserve
+  notify: Перезагрузить nginx
+
+- name: Render vhost
+  ansible.builtin.template:
+    src: nginx-site.conf.j2
+    dest: "{{ deploy_nginx_site_conf }}"
+    mode: "0644"
+  notify: Перезагрузить nginx
+
+- name: Ensure nginx is running and enabled
+  ansible.builtin.systemd_service:
+    name: "{{ deploy_nginx_service_name }}"
+    state: started
+    enabled: true
+
+- name: Apply nginx config before issuing certificate
+  ansible.builtin.meta: flush_handlers
+
+- name: Site responds on :80
+  ansible.builtin.uri:
+    url: http://127.0.0.1/
+    headers:
+      Host: "{{ deploy_nginx_domain }}"
+    status_code: 200

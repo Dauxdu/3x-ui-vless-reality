@@ -1,11 +1,12 @@
 ---
-deploy_nginx_domain: CHANGE_ME
-deploy_nginx_acme_email: CHANGE_ME
+deploy_nginx_domain: example.com
+deploy_nginx_acme_email: admin@example.com
 deploy_nginx_site_source: "{{ playbook_dir }}/../site"
 deploy_nginx_webroot: /var/www/site
 deploy_nginx_site_conf: /etc/nginx/conf.d/site.conf
 deploy_nginx_service_name: nginx
 deploy_nginx_cert_keep_if_exists: true
+deploy_nginx_certbot_dry_run: false
 deploy_nginx_certbot_hooks:
   - name: reload-site-nginx.sh
     content: |

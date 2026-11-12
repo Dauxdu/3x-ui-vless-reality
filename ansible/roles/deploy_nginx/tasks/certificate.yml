@@ -1,0 +1,32 @@
+---
+- name: Issue Let's Encrypt certificate
+  ansible.builtin.command: >
+    certbot certonly --webroot -w {{ deploy_nginx_webroot }} --cert-name {{ deploy_nginx_domain }}
+    -d {{ deploy_nginx_domain }} -m {{ deploy_nginx_acme_email }} --agree-tos --no-eff-email
+    --non-interactive
+    {{ '--keep-until-expiring' if deploy_nginx_cert_keep_if_exists else '' }}
+  register: deploy_nginx_certbot_result
+  changed_when: >-
+    not (deploy_nginx_certbot_result.stdout ~ deploy_nginx_certbot_result.stderr
+    is search('not yet due for renewal|Keeping the existing certificate'))
+
+- name: Enable TLS in vhost
+  ansible.builtin.set_fact:
+    deploy_nginx_tls_enabled: true
+
+- name: Render vhost with TLS
+  ansible.builtin.template:
+    src: nginx-site.conf.j2
+    dest: "{{ deploy_nginx_site_conf }}"
+    mode: "0644"
+  notify: Перезагрузить nginx
+
+- name: Apply final nginx config
+  ansible.builtin.meta: flush_handlers
+
+- name: Check TLS 1.3 + HTTP/2 on 8443 # noqa: command-instead-of-module
+  ansible.builtin.command: >
+    curl --fail --http2 --tlsv1.3 --resolve {{ deploy_nginx_domain }}:8443:127.0.0.1
+    https://{{ deploy_nginx_domain }}:8443/ -o /dev/null
+    -w 'HTTP %{http_code}, версия HTTP/%{http_version}'
+  changed_when: false
