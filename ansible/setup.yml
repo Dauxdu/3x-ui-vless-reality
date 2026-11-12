@@ -5,7 +5,7 @@
   roles:
     - user_setup
     - dauxdu.roles.set_ufw
-    - ssh_hardening
+    - dauxdu.roles.set_ssh
     - deploy_3x_ui
 
 - name: Провижининг oNode
@@ -13,13 +13,8 @@
   become: true
   roles:
     - user_setup
-    - role: dauxdu.roles.set_packages
-      vars:
-        set_packages_apt:
-          - curl
-          - nginx
-          - certbot
+    - dauxdu.roles.set_packages
     - dauxdu.roles.set_ufw
-    - ssh_hardening
+    - dauxdu.roles.set_ssh
     - deploy_nginx
     - deploy_3x_ui
