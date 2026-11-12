@@ -1,10 +1,27 @@
+---
+# Скопируйте в inventory/group_vars/all.yml и замените значения на свои.
+
+ssh_port: 22222
+
+set_ssh_options:
+  Port: "{{ ssh_port }}"
+  PermitRootLogin: "no"
+  PasswordAuthentication: "no"
+  PubkeyAuthentication: "yes"
+  PermitEmptyPasswords: "no"
+
+set_packages_apt:
+  - curl
+  - nginx
+  - certbot
+
 set_ufw_rules_allow:
-  - { port: 22222, proto: tcp, comment: "SSH" }
+  - { port: "{{ ssh_port }}", proto: tcp, comment: "SSH" }
   - { port: 80, proto: tcp, comment: "HTTP + ACME" }
   - { port: 443, proto: tcp, comment: "VLESS Reality" }
 
 user_setup_admin_user: admin
-user_setup_admin_ssh_key: "ssh-ed25519 "
+user_setup_admin_ssh_key: "ssh-ed25519 AAAA..."
 
 deploy_nginx_domain: site.example.com
 deploy_nginx_acme_email: mail@example.com

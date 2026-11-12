@@ -1,4 +1,7 @@
 ---
+# Скопируйте в inventory/hosts.yml.
+# Первый прогон: ansible_port: 22, ansible_user: root.
+# После ssh_hardening смените на свой порт и пользователя.
 all:
   children:
     inode:
