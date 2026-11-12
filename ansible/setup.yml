@@ -3,7 +3,7 @@
   hosts: inode
   become: true
   roles:
-    - user_setup
+    - dauxdu.roles.set_users
     - dauxdu.roles.set_ufw
     - dauxdu.roles.set_ssh
     - deploy_3x_ui
@@ -12,7 +12,7 @@
   hosts: onode
   become: true
   roles:
-    - user_setup
+    - dauxdu.roles.set_users
     - dauxdu.roles.set_packages
     - dauxdu.roles.set_ufw
     - dauxdu.roles.set_ssh
