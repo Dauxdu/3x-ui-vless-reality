@@ -1,14 +1,16 @@
----
 # Скопируйте в inventory/group_vars/all.yml и замените значения на свои.
-
+---
+# Global
 ssh_port: 22222
 
-set_ssh_options:
-  Port: "{{ ssh_port }}"
-  PermitRootLogin: "no"
-  PasswordAuthentication: "no"
-  PubkeyAuthentication: "yes"
-  PermitEmptyPasswords: "no"
+# Roles
+set_chrony_ntp_servers:
+  - time.cloudflare.com
+
+set_users_accounts:
+  - name: admin
+    groups: [sudo]
+    ssh_public_key: "ssh-ed25519 AAAA..."
 
 set_packages_apt:
   - curl
@@ -20,10 +22,12 @@ set_ufw_rules_allow:
   - { port: 80, proto: tcp, comment: "HTTP + ACME" }
   - { port: 443, proto: tcp, comment: "VLESS Reality" }
 
-set_users_accounts:
-  - name: admin
-    groups: [sudo]
-    ssh_public_key: "ssh-ed25519 AAAA..."
+set_ssh_options:
+  Port: "{{ ssh_port }}"
+  PermitRootLogin: "no"
+  PasswordAuthentication: "no"
+  PubkeyAuthentication: "yes"
+  PermitEmptyPasswords: "no"
 
 deploy_nginx_domain: site.example.com
 deploy_nginx_acme_email: mail@example.com

@@ -3,6 +3,8 @@
   hosts: inode
   become: true
   roles:
+    - dauxdu.roles.set_timezone
+    - dauxdu.roles.set_chrony
     - dauxdu.roles.set_users
     - dauxdu.roles.set_ufw
     - dauxdu.roles.set_ssh
@@ -13,6 +15,8 @@
   hosts: onode
   become: true
   roles:
+    - dauxdu.roles.set_timezone
+    - dauxdu.roles.set_chrony
     - dauxdu.roles.set_users
     - dauxdu.roles.set_packages
     - dauxdu.roles.set_ufw
