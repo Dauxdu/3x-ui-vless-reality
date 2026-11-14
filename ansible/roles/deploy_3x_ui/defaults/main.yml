@@ -1,5 +1,7 @@
 ---
-deploy_3x_ui_install_script_url: https://raw.githubusercontent.com/MHSanaei/3x-ui/master/install.sh
-deploy_3x_ui_installer_path: /usr/local/src/3x-ui-install.sh
-deploy_3x_ui_install_creates: /usr/local/x-ui/x-ui
-deploy_3x_ui_service_name: x-ui
+deploy_3x_ui_options:
+  install_script_url: https://raw.githubusercontent.com/MHSanaei/3x-ui/master/install.sh
+  installer_path: /usr/local/src/3x-ui-install.sh
+  install_creates: /usr/local/x-ui/x-ui
+  binary: /usr/local/x-ui/x-ui
+  service_name: x-ui

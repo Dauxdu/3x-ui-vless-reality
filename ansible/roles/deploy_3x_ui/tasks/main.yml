@@ -1,20 +1,32 @@
 ---
 - name: Download 3x-ui installer
   ansible.builtin.get_url:
-    url: "{{ deploy_3x_ui_install_script_url }}"
-    dest: "{{ deploy_3x_ui_installer_path }}"
+    url: "{{ deploy_3x_ui_options.install_script_url }}"
+    dest: "{{ deploy_3x_ui_options.installer_path }}"
     mode: "0755"
 
 - name: Run 3x-ui installer
   ansible.builtin.command:
-    cmd: "{{ deploy_3x_ui_installer_path }}"
+    cmd: "{{ deploy_3x_ui_options.installer_path }}"
   environment:
     XUI_NONINTERACTIVE: "1"
   args:
-    creates: "{{ deploy_3x_ui_install_creates }}"
+    creates: "{{ deploy_3x_ui_options.install_creates }}"
 
 - name: Ensure x-ui panel is running and enabled
   ansible.builtin.systemd_service:
-    name: "{{ deploy_3x_ui_service_name }}"
+    name: "{{ deploy_3x_ui_options.service_name }}"
     state: started
     enabled: true
+
+- name: Read panel settings
+  ansible.builtin.command:
+    cmd: "{{ deploy_3x_ui_options.binary }} setting -show"
+  register: deploy_3x_ui_settings
+  changed_when: false
+
+- name: Print panel login info
+  ansible.builtin.debug:
+    msg:
+      - "Данные для входа в панель 3x-ui ({{ inventory_hostname }}):"
+      - "{{ deploy_3x_ui_settings.stdout_lines }}"
