@@ -4,9 +4,9 @@ INVENTORY := -i ansible/inventory/hosts.yml
 .PHONY: help init inode onode site check
 
 help:
-	@echo "make init     — установить коллекции Ansible из requirements.yml"
-	@echo "make inode     — провижининг iNode (SSH, UFW, 3x-ui)"
-	@echo "make onode     — провижининг oNode (SSH, UFW, nginx, 3x-ui)"
+	@echo "make init      — установить коллекции Ansible из requirements.yml"
+	@echo "make inode     — провижининг iNode"
+	@echo "make onode     — провижининг oNode"
 	@echo "make site      — обновить только сайт+nginx на oNode"
 	@echo "make check     — синтакс-проверка плейбуков и линт ролей"
 
